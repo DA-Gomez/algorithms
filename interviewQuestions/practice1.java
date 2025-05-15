@@ -6,7 +6,7 @@ For example, [1, 4] denotes all integers in the range 1 to 4 or [1, 2, 3, 4].
 Divide the ranges into 2 groups such that any 2 ranges that have at least one common integer belong to the same group.
 
 Given the list of ranges, find the number of ways to distribute these ranges into 2 groups that satisfy the constraint and each group has at least one range. 
-Since the answer can be large, compute it modulo 109+7109+7.
+Since the answer can be large, compute it modulo 109+7109+7. Assume its already sorted
 
 Example:
 Consider ranges = [[1, 5], [3, 8], [10, 15], [13, 14], [20, 100]].
@@ -70,7 +70,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class IBMq2 {
+public class practice1 {
     public static void main(String[] args) {  
         List<List<Integer>> input = new ArrayList<List<Integer>>();//output should 2
 
@@ -78,27 +78,54 @@ public class IBMq2 {
         // input.add(Arrays.asList(2, 5));
         // input.add(Arrays.asList(4, 8));
         // input.add(Arrays.asList(10, 20));
-        input.add(Arrays.asList(1, 5));
-        input.add(Arrays.asList(3, 8));
-        input.add(Arrays.asList(10, 15));
-        input.add(Arrays.asList(13, 14));
-        input.add(Arrays.asList(20, 100));
+
+        // input.add(Arrays.asList(1, 5));
+        // input.add(Arrays.asList(3, 8));
+        // input.add(Arrays.asList(10, 15));
+        // input.add(Arrays.asList(13, 14));
+        // input.add(Arrays.asList(20, 100));
+
+        input.add(Arrays.asList(1, 2));
+        // input.add(Arrays.asList(3, 4));
+        // input.add(Arrays.asList(5, 6));
+        // input.add(Arrays.asList(7, 8));
+        // input.add(Arrays.asList(9, 10));
+        // input.add(Arrays.asList(11, 12));
+        // input.add(Arrays.asList(13, 14));
+        // input.add(Arrays.asList(15, 16));
+        // input.add(Arrays.asList(17, 18));
+        // input.add(Arrays.asList(19, 20));
         System.out.println(distributeRanges(input));
 
      }
 
      public static int distributeRanges(List<List<Integer>> a) {
-        int groups = 0;
+        int groups = 1;
+        List<Integer> group = a.get(0); 
+        //sort the array here
+        
         for (int i = 1; i < a.size(); i++) {
-            if (a.get(i - 1).get(1) <= a.get(i).get(0)) {
-                System.out.println(a.get(i - 1).get(1));
-                System.out.println(a.get(i).get(0));
-                groups++;
+            System.out.print(group);
+            System.out.println(a.get(i).toString());
+            if (group.get(1) >= a.get(i).get(0) && a.get(i).get(0) >= group.get(0)) {
+                group.set(1, Math.max(a.get(i).get(1), group.get(1)));
+                if (a.get(i).get(0) < group.get(0)) {
+                    group.set(0, Math.max(a.get(i).get(0), group.get(0)));
+                }
             }
+            else {
+                groups++;
+                group = a.get(i);
+            }
+
         }
-
-
-        return groups;
+        System.out.println(group);
+        int result = 1;
+        for (int i = 2; i <= groups; i++) {
+            result *= i;
+        }
+        if (result == 1) return 0;
+        return result;    
      }
   
 }
